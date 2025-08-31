@@ -15,8 +15,15 @@ export default defineEventHandler((event) => {
     createContext() {
       return {};
     },
-    onError({ error, path }) {
-      console.error(`tRPC error on '${path}':`, error);
+    onError({ error, path, input }) {
+      console.error(`[tRPC] Error on '${path}':`, {
+        error: error.message,
+        code: error.code,
+        cause: error.cause?.message,
+        input: process.env.NODE_ENV === 'development' ? input : '[HIDDEN]',
+        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+        timestamp: new Date().toISOString(),
+      });
     },
   });
 });
