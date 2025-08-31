@@ -6,6 +6,7 @@ const envSchema = z.object({
   BASE_URL_OTHER_PORT: z.string().optional(),
   ADMIN_PASSWORD: z.string(),
   JWT_SECRET: z.string(),
+  JWT_EXPIRES_IN: z.string().default("7d"),
 });
 
 export const env = envSchema.parse(process.env);
