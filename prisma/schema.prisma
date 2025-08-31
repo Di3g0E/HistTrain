@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:postgres@postgres/app" // hardcoded because it's an internal docker connection
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Relations
+  workouts     Workout[]
+  workoutGoals WorkoutGoal[]
+}
+
+model Workout {
+  id           Int      @id @default(autoincrement())
+  trainingTime Int      // training duration in minutes
+  trainingType String   // type of training (musculación/fuerza, farlek, carrera, sprints, bici, etc.)
+  date         DateTime // date of the workout
+  sensations   String   // user's sensations after the workout
+  createdAt    DateTime @default(now())
+  
+  // User relation
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model WorkoutGoal {
+  id          Int      @id @default(autoincrement())
+  type        String   // 'weekly' or 'monthly'
+  targetValue Int      // target number (e.g., 4 workouts, 10 hours)
+  unit        String   // 'workouts' or 'hours'
+  startDate   DateTime // when this goal becomes active
+  isActive    Boolean  @default(true) // whether this goal is currently active
+  createdAt   DateTime @default(now())
+  
+  // User relation
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
