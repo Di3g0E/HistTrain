@@ -8,8 +8,11 @@ export const signUp = baseProcedure
   .input(
     z.object({
       email: z.string().email("Email inválido"),
-      password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
-      name: z.string().min(1, "El nombre es requerido"),
+      password: z.string()
+        .min(8, "La contraseña debe tener al menos 8 caracteres")
+        .max(128, "La contraseña es demasiado larga")
+        .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, "La contraseña debe contener al menos una mayúscula, una minúscula y un número"),
+      name: z.string().min(1, "El nombre es requerido").max(100, "El nombre es demasiado largo"),
     })
   )
   .mutation(async ({ input }) => {
