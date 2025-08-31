@@ -2,7 +2,8 @@
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider } from "@tanstack/react-router";
+import { RouterProvider } from "@tanstack/react-router";ç
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 import "./styles.css";
 
@@ -16,7 +17,9 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <React.StrictMode>
-      <RouterProvider router={router} />
+      <ErrorBoundary>
+        <RouterProvider router={router} />
+      </ErrorBoundary>
     </React.StrictMode>,
   );
 }
