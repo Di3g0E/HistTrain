@@ -42,7 +42,7 @@ export const signIn = baseProcedure
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       env.JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: env.JWT_EXPIRES_IN }
     );
 
     return {
