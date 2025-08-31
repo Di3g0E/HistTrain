@@ -26,22 +26,20 @@ export function AuthGuard({ children }: AuthGuardProps) {
   );
 
   useEffect(() => {
-    if (!token || !isAuthenticated) {
-      navigate({ to: "/auth/login" });
-      return;
-    }
+  if (!token || !isAuthenticated) {
+    navigate({ to: "/auth/login" });
+    return;
+  }
 
-    // If we have a token but the query failed, clear auth and redirect
-    if (getCurrentUserQuery.isError) {
-      clearUser();
-      navigate({ to: "/auth/login" });
-    }
+  if (getCurrentUserQuery.isError) {
+    clearUser();
+    navigate({ to: "/auth/login" });
+  }
 
-    // If we successfully got user data, update the store
-    if (getCurrentUserQuery.data?.user) {
-      setUser(getCurrentUserQuery.data.user, token);
-    }
-  }, [token, isAuthenticated, getCurrentUserQuery.isError, getCurrentUserQuery.data, navigate, setUser, clearUser]);
+  if (getCurrentUserQuery.data?.user) {
+    setUser(getCurrentUserQuery.data.user, token);
+  }
+}, [token, isAuthenticated, getCurrentUserQuery.isError, getCurrentUserQuery.data?.user, navigate]); // Remover setUser y clearUser de las dependencias
 
   // Show loading while checking authentication
   if (!token || !isAuthenticated || getCurrentUserQuery.isLoading) {
