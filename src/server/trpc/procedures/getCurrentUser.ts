@@ -41,9 +41,22 @@ export const getCurrentUser = baseProcedure
 
       return { user };
     } catch (error) {
-      throw new TRPCError({
-        code: "UNAUTHORIZED",
-        message: "Token inválido o expirado",
-      });
-    }
+  if (error instanceof jwt.JsonWebTokenError) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Token inválido",
+    });
+  }
+  if (error instanceof jwt.TokenExpiredError) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Token expirado",
+    });
+  }
+  console.error('Error verificando token:', error);
+  throw new TRPCError({
+    code: "INTERNAL_SERVER_ERROR",
+    message: "Error interno del servidor",
+  });
+}
   });
