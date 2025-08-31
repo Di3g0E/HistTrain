@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface TrainingType {
   id: string;
@@ -91,13 +92,15 @@ export const useTrainingTypesStore = create<TrainingTypesState>()(
       trainingTypes: defaultTrainingTypes,
       
       addTrainingType: (trainingType) => {
-        const newId = Date.now().toString();
-        set((state) => ({
-          trainingTypes: [
-            ...state.trainingTypes,
-            { ...trainingType, id: newId }
-          ]
-        }));
+        set((state) => {
+          const newId = uuidv4();
+          return {
+            trainingTypes: [
+              ...state.trainingTypes,
+              { ...trainingType, id: newId }
+            ]
+          };
+        });
       },
       
       updateTrainingType: (id, updates) => {
